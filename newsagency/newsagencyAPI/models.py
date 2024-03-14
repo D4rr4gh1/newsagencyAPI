@@ -12,10 +12,10 @@ class Author(models.Model):
 
 class Story(models.Model):
     storyCategories = {
-        'Pol' : 'Politics',
-        'Art' : 'Art',
-        'Tec' : 'Tech',
-        'Trv' : 'Trivia'
+        'pol' : 'Politics',
+        'art' : 'Art',
+        'tech' : 'Tech',
+        'trivia' : 'Trivial News'
     }
 
     storyRegions = {
@@ -25,11 +25,11 @@ class Story(models.Model):
     }
 
     headline = models.CharField(max_length=64)
-    category = models.CharField(max_length=3, choices=storyCategories)
+    category = models.CharField(max_length=6, choices=storyCategories)
     region = models.CharField(max_length=2, choices=storyRegions)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    date = models.DateField()
-    details = models.CharField(max_length=128)
+    date = models.DateField(auto_now_add=True)
+    details = models.CharField(max_length=256)
 
     def __str__(self):
         return self.headline
