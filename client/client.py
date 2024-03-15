@@ -164,7 +164,7 @@ def main():
                     print("You are not logged in")
                     continue
                 if len(args) != 2:
-                    print("Invalid number of arguments")
+                    print("Invalid number of arguments. Usage is delete <storyID>")
                 
                 if not args[1].isdigit():
                     print("Invalid story ID. Must be a digit")
@@ -176,7 +176,7 @@ def main():
             case "exit":
                 loop = False
                 continue
-        print("Invalid command")
+        print("Invalid command. Available commands are: login, logout, post, news, list, delete, exit")
 
 
     return
