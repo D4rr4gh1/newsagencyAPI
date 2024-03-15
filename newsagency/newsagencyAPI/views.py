@@ -42,23 +42,18 @@ class StoriesView(View):
         if not request.method == 'GET':
             return HttpResponse('Method not allowed', content_type='text/plain', status=503)
         
+        if request.body:
         
-        bodyUnicode = request.body.decode('utf-8')
-        requestBody=parse_qs(bodyUnicode)
+            bodyUnicode = request.body.decode('utf-8')
+            requestBody=parse_qs(bodyUnicode)
 
-        requestedCategory = requestBody['story_cat'][0]
-        requestedRegion = requestBody['story_region'][0]
-        requestedDate = requestBody['story_date'][0]
-
-        if requestedCategory == None:
+            requestedCategory = requestBody['story_cat'][0]
+            requestedRegion = requestBody['story_region'][0]
+            requestedDate = requestBody['story_date'][0]
+        else:
             requestedCategory = '*'
-        
-        if requestedRegion == None:
             requestedRegion = '*'
-        
-        if requestedDate == None:
             requestedDate = '*'
-                
 
         storySet = Story.objects.all()
 

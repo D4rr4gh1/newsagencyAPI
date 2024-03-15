@@ -7,7 +7,7 @@ session = requests.Session()
 
 def login(username, password):
     try:
-        response = session.post(f"{URL}/api/login", data={"username" : username, "password" : password})
+        response = session.post(f"{URL}/api/login", data={"username" : username, "password" : password}, headers={'Content-Type': 'application/x-www-form-urlencoded'})
     except Exception as e:
         print(f"Login Failed: {str(e)}")
         return
@@ -41,7 +41,7 @@ def news(id=None, category="*", region="*", date="*"):
     if id != None:
         site = next((site for site in response.json() if site['agency_code'] == id), None)
         if site:
-            response = requests.get(f"{site['url']}/api/stories", data={"story_cat" : category, "story_region" : region, "story_date" : date})
+            response = requests.get(f"{site['url']}/api/stories", data={"story_cat" : category, "story_region" : region, "story_date" : date}, headers={'Content-Type': 'application/x-www-form-urlencoded'})
             if response.status_code != 200:
                 print(f"Failed to get news: {response.text}")
                 return
@@ -104,11 +104,7 @@ def list():
     return
 
 def delete(storyID):
-    try:
-        response = session.post(f"{URL}/api/stories/{storyID}")
-    except Exception as e:
-        print(f"Failed to delete story: {str(e)}")
-        return
+    response = session.delete(f"{URL}/api/stories/{storyID}")
     
     print(response.text)
 
@@ -129,7 +125,7 @@ def main():
                     print("Invalid number of arguments. Usage is login <URL>")
                     
                 else:
-                    URL = "https://" + args[1]
+                    URL = "http://" + args[1]
                     username = input("Username: ")
                     password = getpass("Password: ")
                     login(username, password)          
@@ -139,6 +135,7 @@ def main():
                     print("You are not logged in")
                     continue
                 logout()
+                URL=None
                 continue
             case "post":
                 if URL == None:
@@ -168,12 +165,18 @@ def main():
                     continue
                 if len(args) != 2:
                     print("Invalid number of arguments")
+                
+                if not args[1].isdigit():
+                    print("Invalid story ID. Must be a digit")
+                
                 else:
+                    # print(args[1])
                     delete(args[1])
                 continue
             case "exit":
                 loop = False
                 continue
+        print("Invalid command")
 
 
     return
